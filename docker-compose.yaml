@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web-public:
+    build: ./frontend_public
+    ports:
+      - "8001:5000"
+  web-panel:
+    build: ./frontend_panel
+    ports:
+      - "8101:8501"
+  api:
+    build: ./backend_api
+    ports:
+      - "5010:5000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
